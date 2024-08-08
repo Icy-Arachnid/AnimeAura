@@ -1,10 +1,20 @@
+
 import { getAnimeScroll } from "@/lib/getData";
 import Navbar from "./Navbar";
 import CardAnime from "./CardAnime";
+import { Pagination } from "./Pagination";
 
-export default async function Dashboard() {
 
-    const animes = await getAnimeScroll()
+interface Props {
+    searchParams: {
+        id?: string
+    }
+}
+
+export default async function Dashboard({searchParams}: Props) {
+
+    const {animes, totalPage} = await getAnimeScroll(searchParams.id)
+    console.log(searchParams.id)
 
     return (
         <>
@@ -14,6 +24,7 @@ export default async function Dashboard() {
                     <CardAnime title={ele.title} photo={ele.photo} id={ele.id}/>
                 ))}
             </div>
+            <Pagination totalPages={totalPage}/>
         </>
     )
 }
