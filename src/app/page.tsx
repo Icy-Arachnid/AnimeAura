@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 import CardAnime from "@/components/ui/CardAnime";
 import Navbar from "@/components/ui/Navbar";
 import { Pagination } from "@/components/ui/Pagination";
@@ -28,6 +29,7 @@ export default function Home({ searchParams }: Props) {
       (username === adminUsername && password === adminPassword) ||
       (username === userUsername && password === userPassword)
     ) {
+      Cookies.set("isLoggedIn", "true", { expires: 7 });
       setIsLoggedIn(true);
     } else {
       alert("Credenciales incorrectas");
@@ -35,13 +37,18 @@ export default function Home({ searchParams }: Props) {
   };
 
   useEffect(() => {
+    const cookieLoggedIn = Cookies.get("isLoggedIn");
+    if (cookieLoggedIn === "true") {
+      setIsLoggedIn(true);
+    }
+
     const fetchData = async () => {
       const { animes, totalPage } = await getAnimeScroll(searchParams.page);
       setAnimes(animes);
       setTotalPage(totalPage);
     };
 
-    if (isLoggedIn) {
+    if (cookieLoggedIn === "true") {
       fetchData();
     }
   }, [isLoggedIn, searchParams.page]);
