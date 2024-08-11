@@ -1,4 +1,3 @@
-import { Suspense } from "react"
 import AnimeInfo from "@/components/ui/AnimeInfo"
 import Navbar from "@/components/ui/Navbar"
 
